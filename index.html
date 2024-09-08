@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @keyframes colorChange {
+        0% {
+            color: rgb(245, 229, 5); /* Start color */
+        }
+        50% {
+            color: red; /* End color */
+        }
+        100%{
+            color: black;
+        }
+        }
+
+        /* Apply the animation to the element */
+        #error {
+        color: red;
+        animation: colorChange 1s ease-in-out infinite; /* 2 seconds duration */
+        }
+        .old-commit{
+            color: red;
+        }
+        .new-commit{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="display: inline;" class="old-commit">Old commit (SHA256)</h2>
+    <input type="text" id="old-commit" placeholder="Enter old commit SHA256"> 
+    <br>
+
+    <h2 style="display: inline-block;" class="new-commit">New commit</h2> 
+    <input type="text" id="new-commit" placeholder="Enter new commit SHA256"> 
+
+    <br><br>
+    <button id="compare-commits" onclick="compareCommits()">Compare Commits</button>
+    <h1 id="error"></h1>
+    <p id="comparison-link"></p>
+
+    <script>
+        function compareCommits() {
+            // Get the values of the input fields by their IDs
+            const oldCommit = document.getElementById('old-commit').value;
+            const newCommit = document.getElementById('new-commit').value;
+            if(!oldCommit || !newCommit) document.getElementById('error').innerHTML = "One of the commits are missing!"
+            setTimeout(()=>{
+                document.getElementById('error').innerHTML = "";
+            }, 6000)
+            const comparisonLinkElement = document.getElementById('comparison-link');
+            // Check if both values are filled
+            if (oldCommit && newCommit) {
+                // Dynamically create the comparison URL for GitLab
+
+                const comparisonUrl = `https://gitlab.com/siirmartin/martial/-/compare?from=${oldCommit}&to=${newCommit}`;
+                
+                comparisonLinkElement.innerHTML = `Comparison URL: <a href="${comparisonUrl}" target="_blank">${comparisonUrl}</a>`;
+            }
+        }
+    </script>
+</body>
+</html>
