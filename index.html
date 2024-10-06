@@ -10,17 +10,17 @@
             color: rgb(245, 229, 5); /* Start color */
         }
         50% {
-            color: red; /* End color */
+            color: red; /* Middle color */
         }
         100%{
-            color: black;
+            color: black; /* End color */
         }
         }
 
         /* Apply the animation to the element */
         #error {
         color: red;
-        animation: colorChange 1s ease-in-out infinite; /* 2 seconds duration */
+        animation: colorChange 1s ease-in-out infinite; /* 1 second duration */
         }
         .old-commit{
             color: red;
@@ -40,27 +40,53 @@
 
     <br><br>
     <button id="compare-commits" onclick="compareCommits()">Compare Commits</button>
+
+    <br><br>
+    <h2 style="display: inline-block;" class="cloudflareOptimizer">Your image ID:</h2>
+    <input type="text" id="imageId" placeholder="enter your image ID for cloudflare">
+    <input type="text" id="arguments" placeholder="width=60,height=100">
+    <input type="text" id="version" placeholder="enter your version">
+    <p id="imageIdResult"></p>
+    <button id="images" onclick="imageIdLink()">Generate Image URL</button>
+
+    <br><br>
     <h1 id="error"></h1>
-    <p id="comparison-link"></p>
+    <p id="result"></p>
 
     <script>
         function compareCommits() {
             // Get the values of the input fields by their IDs
             const oldCommit = document.getElementById('old-commit').value;
             const newCommit = document.getElementById('new-commit').value;
-            if(!oldCommit || !newCommit) document.getElementById('error').innerHTML = "One of the commits are missing!"
-            setTimeout(()=>{
-                document.getElementById('error').innerHTML = "";
-            }, 6000)
-            const comparisonLinkElement = document.getElementById('comparison-link');
-            // Check if both values are filled
-            if (oldCommit && newCommit) {
-                // Dynamically create the comparison URL for GitLab
 
-                const comparisonUrl = `https://gitlab.com/siirmartin/martial/-/compare?from=${oldCommit}&to=${newCommit}`;
-                
-                comparisonLinkElement.innerHTML = `Comparison URL: <a href="${comparisonUrl}" target="_blank">${comparisonUrl}</a>`;
+            // Check if both values are filled
+            if (!oldCommit || !newCommit) {
+                document.getElementById('error').innerHTML = "One of the commits is missing!";
+                setTimeout(() => {
+                    document.getElementById('error').innerHTML = "";
+                }, 6000);
+                return; // Exit the function if a commit is missing
             }
+
+            const comparisonLinkElement = document.getElementById('result');
+
+            // Dynamically create the comparison URL for GitLab
+            const comparisonUrl = `https://gitlab.com/siirmartin/martial/-/compare?from=${oldCommit}&to=${newCommit}`;
+            
+            comparisonLinkElement.innerHTML = `Comparison URL: <a href="${comparisonUrl}" target="_blank">${comparisonUrl}</a>`;
+        }
+
+        function imageIdLink() {
+            const imageId = document.getElementById('imageId').value;
+            const arguments123 = document.getElementById('arguments').value;
+            const version = document.getElementById('version').value;
+            if (!imageId) {
+                document.getElementById('imageIdResult').innerHTML = "Please fill out all fields for the image ID, arguments, and version.";
+                return;
+            }
+            if(!version) version = "original"
+            const url = `https://images.scufflr.com/cdn-cgi/image/${arguments123}/https://images.scufflr.com/images/${imageId}/${version}`;
+            document.getElementById('imageIdResult').innerHTML = `${url}`;
         }
     </script>
 </body>
